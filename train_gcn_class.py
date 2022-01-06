@@ -13,9 +13,12 @@ list_mol_graph, properties = load_data(name)
 
 properties = torch.FloatTensor(properties)
 
-print('select...')
+# for i in range(13):
+#     print('\n\n',i)
+#     print('select...')
+i  = 0
 Datas = []
-Target = 2
+Target = i
 print('Target num:', Target)
 
 for i_mol_graph, y in zip(list_mol_graph, properties):
@@ -30,6 +33,8 @@ for i_mol_graph, y in zip(list_mol_graph, properties):
         Datas.append(datai)
 
 print('\nlen  target:', len(Datas))
+
+# exit()
 
 mean = torch.mean(properties, dim=0, keepdim=True)
 std = torch.std(properties, dim=0, keepdim=True)
@@ -87,6 +92,7 @@ def train():
         optimizer.zero_grad()
         
         out = model(data.x, data.edge_index,data.edge_attr, data.batch)
+        # print(out.shape)
         loss = criterion(out, data.y)
         loss_all+=loss.cpu().detach()
         # print(out[:5])
@@ -124,11 +130,12 @@ for epoch in range(1, Epochs):
     train_acc = test(train_loader)
     test_acc = test(test_loader)
     print(f'Epoch: {epoch:03d}, Train Acc: {train_acc:.4f}, Test Acc: {test_acc:.4f}')
-    
+    print()
     if epoch>Epochs-10:
         if test_acc>oldacc:
             best_epoch = epoch
             torch.save(model.state_dict(), f'{MODEL_DICT_DIR}/{name}-target_{Target}.pkl')
+            print("saved model in ", f'{MODEL_DICT_DIR}/{name}-target_{Target}.pkl')
             print("best epoch changes-", best_epoch)
 
 print("BEST epoch:", best_epoch)

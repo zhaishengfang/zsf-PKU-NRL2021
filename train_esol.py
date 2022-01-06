@@ -30,7 +30,7 @@ if USE_CUDA:
     torch.cuda.manual_seed(USE_CUDA)
 
 print('\tLoading Data...')
-list_mol_graph, properties = load_data('ESOL')
+list_mol_graph, properties = load_data('Lipop')
 # exit()
 n_mol = len(list_mol_graph)
 list_torch_graph = [(
@@ -43,7 +43,7 @@ properties = torch.FloatTensor(properties)
 mean = torch.mean(properties, dim=0, keepdim=True)
 std = torch.std(properties, dim=0, keepdim=True)
 
-exit()
+# exit()
 seq = np.random.permutation(n_mol)
 train_seq = seq[:int(n_mol * 0.8)]
 validate_seq = seq[int(n_mol * 0.8):-int(n_mol * 0.1)]
@@ -170,7 +170,7 @@ for epoch in range(0,   EPOCH): # 20):
         # print('\tEvaluating Time: {}'.format(int(t2 - t1)))
     
     # 不需要每次都存储模型
-    if epoch % 10 == 0  and rmse_val < best_metric:  # or epoch>175)
+    if epoch > EPOCH-10 and rmse_val < best_metric:  # or epoch>175)
         best_metric = rmse_val
         best_test_ans = rmse_test
         best_epoch = epoch

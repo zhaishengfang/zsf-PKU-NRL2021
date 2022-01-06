@@ -9,8 +9,9 @@ import random
 
 BATCH_SIZE = 16
 
-name = r"Lipop"
+name = r"ESOL"
 list_mol_graph, properties = load_data(name)
+print('Name:', name)
 
 properties = torch.FloatTensor(properties)
 mean = torch.mean(properties, dim=0, keepdim=True)
@@ -126,7 +127,7 @@ for epoch in range(1, Epochs):
         if test_rmse < oldrmse:
             best_epoch = epoch
             oldrmse = test_rmse
-            torch.save(model.state_dict(), f'{MODEL_DICT_DIR}/{name}-target_{Target}.pkl')
+            torch.save(model.state_dict(), f'{MODEL_DICT_DIR}/{name}-reg.pkl')
             print("best epoch changes-", best_epoch)
 
 print("BEST epoch:", best_epoch)
